@@ -1,75 +1,60 @@
-#test_pizza_main.py
-import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import time
 from pytest_check import check
-import allure
 
-URL = "https://slqamsk.github.io/cases/pizza/v08"
+PAGE_URL = "https://slqamsk.github.io/tmp/xPath02.html"
 
-@allure.title("1. Проверка заголовков")
+
 def test_titles():
-    dr = webdriver.Chrome()
-
-    with allure.step("Открыть страницу"):
-        dr.get(URL)
-
+    driver = webdriver.Chrome()
+    driver.get(PAGE_URL)
     with check:
-        with allure.step("Проверить заголовок страницы"):
-            assert dr.title == "Пиццерия - Оформление заказа"
-
+        assert driver.title == "Пиццерия - Оформление заказа"
     with check:
-        with allure.step("Проверить заголовок на странице"):
-            el = dr.find_element(By.XPATH, "//h1")
-            assert el.text == "Пиццерия \"Итальянский уголок\""
+        element = driver.find_element(By.XPATH, "//h1")
+        assert element.text == "Пиццерия \"Итальянский уголок\""
+    driver.quit()
 
-@allure.title("Проверка заказа пиццы")
+
+def test_base_menu():
+    driver = webdriver.Chrome()
+    driver.get(PAGE_URL)
+    with check:
+        assert driver.find_element(By.XPATH, "//h3[.='Маргарита']")
+    with check:
+        assert driver.find_element(By.XPATH, "//h3[.='Четыре сыра']")
+    with check:
+        assert driver.find_element(By.XPATH, "//h3[.='Вегетарианская']")
+    driver.quit()
+
+def test_pizza_of_the_day():
+    driver = webdriver.Chrome()
+    driver.get(PAGE_URL)
+    element = driver.find_element(By.XPATH, "//h3[contains(., '(пицца дня)')]")
+    with check:
+        assert '(пицца дня)' in element.text
+    with check:
+        assert 'Маргарита' not in element.text
+    with check:
+        assert 'Четыре сыра' not in element.text
+    with check:
+        assert 'Вегетарианская' not in element.text
+    driver.quit()
+
 def test_order_base_pizza():
-    with allure.step("Открытие страницы"):
-        dr = webdriver.Chrome()
-        dr.get(URL)
+    driver = webdriver.Chrome()
+    driver.get(PAGE_URL)
+    driver.find_element(By.XPATH,"//h3[.='Маргарита']/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[.='Четыре сыра']/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[.='Вегетарианская']/parent::*/button").click()
+    time.sleep(5)
 
-    with allure.step("Поиск и добавление пиццы в заказ"):
-        element_1 = dr.find_element(By.XPATH, "//h3[.='Маргарита']/parent::*//child::button")
-        element_1.click()
-        time.sleep(1)
-        element_2 = dr.find_element(By.XPATH, "//h3[.='Четыре сыра']/parent::*//child::button")
-        element_2.click()
-        time.sleep(1)
-        element_3 = dr.find_element(By.XPATH, "//h3[.='Вегетарианская']/parent::*//child::button")
-        element_3.click()
-
-    with allure.step("Переход в корзину"):
-        dr.find_element(By.XPATH, "//a[@class='cart-link']").click()
-        time.sleep(2)
-    with allure.step("Оформление заказа"):
-        dr.find_element(By.XPATH, "//button[@id='place-order']").click()
-        time.sleep(2)
-    with allure.step("Ввод данных покупателя"):
-        dr.find_element(By.XPATH, "//input[@id='customer-name']").send_keys("Капустина Ира")
-        dr.find_element(By.XPATH, "//input[@id='customer-email']").send_keys("KapuIr@mail.ru")
-        dr.find_element(By.XPATH, "//button[@id='confirm-order']").click()
-        time.sleep(2)
-
-    with check:
-        with allure.step("Проверка отображения имени и фамилии клиента"):
-            order = dr.find_element(By.XPATH, "//div[@id='order-info']")
-            assert "Капустина Ира" in order.text
-
-    with check:
-        with allure.step("Проверка отображения почты клиента"):
-            assert "KapuIr@mail.ru" in order.text
-
-    with check:
-        with allure.step("Проверка состава заказа"):
-            assert "Вегетарианская" and "Четыре сыра" and "Маргарита" in order.text
-
-    with check:
-        with allure.step("Проверка присвоения номера заказа"):
-            assert "Номер заказа:" in order.text
-
-    el_number = dr.find_element(By.XPATH, "//strong[.='Номер заказа:']/parent::p")
-    print (el_number.text)
-    print(el_number.text.replace("Номер заказа: #", ""))
-    # В переменно txt_order_number сохранили номер заказа
-    txt_order_number = el_number.text.replace("Номер заказа: #", "")
+    element = driver.find_element(By.XPATH, "//input[@id='customer-name']")
+    element.send_keys('Капустина Ира')
+    element = driver.find_element(By.XPATH, "//input[@id='customer-email']")
+    element.send_keys('KapuIr@mail.ru')
+    time.sleep(5)
+    driver.find_element(By.XPATH, "//button[@id='place-order']").click()
+    time.sleep(5)
+    driver.quit()
