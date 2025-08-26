@@ -1,0 +1,80 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+from pytest_check import check
+import allure
+
+
+
+URL = "https://slqamsk.github.io/cases/pizza/v08"
+
+
+@allure.title ("Проверка заголовков")
+def test_titles():
+    # Драйвер
+    driver = webdriver.Chrome()
+    driver.get(URL)
+    with check:
+        with allure.step:
+            # проверка заголовка на соответствие требованиям
+            assert driver.title == "Пиццерия - Оформление заказа"
+    with check:
+        with allure.step:
+            # проверка текста заголовка на соответствие требованиям
+            element = driver.find_element(By.XPATH, "//h1")
+            assert element.text == "Пиццерия \"Итальянский уголок\""
+    # драйвер закрывается
+    driver.quit()
+
+@allure.title ("Проверка базового меню пиццерии")
+def test_base_menu():
+    driver = webdriver.Chrome()
+    driver.get(URL)
+    with check:
+        with allure.step:
+            assert driver.find_element(By.XPATH, "//h3[.='Маргарита']")
+    with check:
+        with allure.step:
+            assert driver.find_element(By.XPATH, "//h3[.='Четыре сыра']")
+    with check:
+        with allure.step:
+            assert driver.find_element(By.XPATH, "//h3[.='Вегетарианская']")
+    driver.quit()
+
+@allure.title ("Проверка Пиццы Дня")
+def test_pizza_of_the_day():
+    driver = webdriver.Chrome()
+    driver.get(URL)
+    element = driver.find_element(By.XPATH, "//h3[contains(., '(пицца дня)')]")
+    with check:
+        with allure.step:
+            assert '(пицца дня)' in element.text # Пицца есть в условии пиццы дня
+    with check:
+        with allure.step:
+            assert 'Маргарита' not in element.text # Пицца нет в условии пиццы дня
+    with check:
+        with allure.step:
+            assert 'Четыре сыра' not in element.text # Пицца нет в условии пиццы дня
+    with check:
+        with allure.step:
+            assert 'Вегетарианская' not in element.text # Пицца нет в условии пиццы дня
+    driver.quit()
+
+@allure.title ("Проверка заказа базовых пицц")
+def test_order_base_pizza():
+    driver = webdriver.Chrome()
+    driver.get(URL)
+    with allure.step:
+        driver.find_element(By.XPATH,"//h3[.='Маргарита']/parent::*/button").click()
+        driver.find_element(By.XPATH, "//h3[.='Четыре сыра']/parent::*/button").click()
+        driver.find_element(By.XPATH, "//h3[.='Вегетарианская']/parent::*/button").click()
+    time.sleep(5)
+
+    element = driver.find_element(By.XPATH, "//input[@id='customer-name']") # ввод имени клиента
+    element.send_keys('Капустина Ира')
+    element = driver.find_element(By.XPATH, "//input[@id='customer-email']") # ввод почты клиента
+    element.send_keys('KapuIr@mail.ru')
+    time.sleep(5)
+    driver.find_element(By.XPATH, "//button[@id='place-order']").click()
+    time.sleep(5)
+    driver.quit()
