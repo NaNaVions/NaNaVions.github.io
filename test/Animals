@@ -1,0 +1,21 @@
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    def speak(self):
+        return "Some sound"
+
+class Cat(Animal):
+    def speak(self):
+        return "Мяу"
+
+class Dog(Animal):
+    def speak(self):
+        return "Гав"
+
+# Создаем объекты
+cat = Cat("Найт")
+dog = Dog("Харт")
+
+# Выводим звуки
+print(f"{cat.name} говорит: {cat.speak()}")
+print(f"{dog.name} говорит: {dog.speak()}")
