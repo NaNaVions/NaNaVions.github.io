@@ -53,9 +53,9 @@ def test_pizza_of_the_day(): #Проверка пиццы дня
 def test_adding_pizzas_to_cart():    #Добавление пицц в корзину
     driver = webdriver.Chrome()
     driver.get(PAGE_URL)
-    driver.find_element(By.XPATH, "//h3[.='Пепперони']/parent::*/button").click()
-    driver.find_element(By.XPATH, "//h3[.='Четыре сыра']/parent::*/button").click()
-    driver.find_element(By.XPATH, "//h3[.='Гавайская']/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Пепперони')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Гавайская')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Четыре сыра')]/parent::*/button").click()
     time.sleep(2)
     # Переход в корзину
     driver.find_element(By.XPATH, "//a[@class='cart-link']").click()
@@ -73,9 +73,9 @@ def test_removing_pizzas_from_cart(): #Удаление пицц из корзи
     driver = webdriver.Chrome()
     driver.get(PAGE_URL)
     # Добавляем пиццы в корзину
-    driver.find_element(By.XPATH, "//h3[.='Пепперони']/parent::*/button").click()
-    driver.find_element(By.XPATH, "//h3[.='Четыре сыра']/parent::*/button").click()
-    driver.find_element(By.XPATH, "//h3[.='Гавайская']/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Пепперони')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Гавайская')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "////h3[contains(., 'Четыре сыра')]/parent::*/button").click()
     time.sleep(1)
     # Переход в корзину
     driver.find_element(By.XPATH, "//a[@class='cart-link']").click()
@@ -91,9 +91,9 @@ def test_placing_an_order(): # Оформление заказа
     driver = webdriver.Chrome()
     driver.get(PAGE_URL)
     # Добавляем пиццы в корзину
-    driver.find_element(By.XPATH, "//h3[.='Пепперони']/parent::*/button").click()
-    driver.find_element(By.XPATH, "//h3[.='Четыре сыра']/parent::*/button").click()
-    driver.find_element(By.XPATH, "//h3[.='Гавайская']/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Пепперони')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Гавайская')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Четыре сыра')]/parent::*/button").click()
     time.sleep(1)
     # Переход в корзину
     driver.find_element(By.XPATH, "//a[@class='cart-link']").click()
