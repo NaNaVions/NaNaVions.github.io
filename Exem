@@ -21,19 +21,19 @@ def test_base_menu(): # Базовое меню
     driver = webdriver.Chrome()
     driver.get(PAGE_URL)
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Маргарита']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Маргарита')]")
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Четыре сыра']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Четыре сыра')]")
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Вегетарианская']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Вегетарианская')]")
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Пепперони']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Пепперони')]")
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Мясная']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Мясная')]")
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Трюфельная']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Трюфельная')]")
     with check:
-        assert driver.find_element(By.XPATH, "//h3[.='Карбонара']")
+        assert driver.find_element(By.XPATH, "//h3[contains(., 'Карбонара')]")
     driver.quit()
 
 def test_pizza_of_the_day(): #Проверка пиццы дня
@@ -75,7 +75,7 @@ def test_removing_pizzas_from_cart(): #Удаление пицц из корзи
     # Добавляем пиццы в корзину
     driver.find_element(By.XPATH, "//h3[contains(., 'Пепперони')]/parent::*/button").click()
     driver.find_element(By.XPATH, "//h3[contains(., 'Гавайская')]/parent::*/button").click()
-    driver.find_element(By.XPATH, "////h3[contains(., 'Четыре сыра')]/parent::*/button").click()
+    driver.find_element(By.XPATH, "//h3[contains(., 'Четыре сыра')]/parent::*/button").click()
     time.sleep(1)
     # Переход в корзину
     driver.find_element(By.XPATH, "//a[@class='cart-link']").click()
